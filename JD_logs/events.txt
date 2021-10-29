@@ -1,0 +1,4 @@
+TriggerServerEvent('playerDied',1,GetPlayerServerId(PlayerId()
+TriggerServerEvent('playerDied',2,GetPlayerServerId(PlayerId()
+TriggerServerEvent('playerShotWeapon', WeaponNames[tostring(GetSelectedPedWeapon(playerped)
+TriggerServerEvent('ClientDiscord', message, id, id2, color, channel)

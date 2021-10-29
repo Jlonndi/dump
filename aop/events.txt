@@ -1,0 +1,4 @@
+TriggerServerEvent('AOP:Sync')
+TriggerServerEvent('AOP:PTSync')
+TriggerEvent('AOP:RunConfig')
+TriggerEvent('AOP:SetPlayerSpawnPoint', PlayerPedId()

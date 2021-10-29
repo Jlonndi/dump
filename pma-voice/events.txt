@@ -1,0 +1,3 @@
+TriggerEvent('chat:addSuggestion', '/mute', 'Mutes the player with the specified id', {
+		{ name = "player id", help = "the player to toggle mute" }
+	})

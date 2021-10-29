@@ -1,0 +1,1 @@
+TriggerServerEvent('Badger_Discord_API:PlayerLoaded')

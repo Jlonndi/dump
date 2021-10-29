@@ -1,0 +1,3 @@
+TriggerServerEvent('complete:job',mypayambulance, 'ab')
+TriggerServerEvent('complete:job',mypayambulance, 'ab')
+TriggerServerEvent('complete:job',mypayambulance, 'ab')

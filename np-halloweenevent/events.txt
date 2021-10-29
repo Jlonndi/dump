@@ -1,0 +1,3 @@
+TriggerEvent("DoLongHudText", "You have received instructions in your clipboard. Keep this for yourself.")
+TriggerEvent("DoLongHudText", "You have received instructions in your clipboard. Keep this for yourself.")
+TriggerEvent("DoLongHudText", "You have received instructions in your clipboard. Keep this for yourself.")

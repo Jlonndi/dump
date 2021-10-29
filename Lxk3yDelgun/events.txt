@@ -1,0 +1,1 @@
+TriggerServerEvent("Lxk3yDelgun:Server:DeleteEntity", netId)

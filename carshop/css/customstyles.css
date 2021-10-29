@@ -1,0 +1,38 @@
+.jumbotron{
+    background-color: #383434;
+    color:white;
+}
+
+.thumbnail{
+    background-color: #383434;
+    border: 1px solid #000;
+}
+
+.thumbnail .caption {
+    color: #fff;
+}
+
+.list-group-item{
+    background: #383434;
+    border: 1px solid #000;
+}
+
+a.list-group-item, button.list-group-item {
+    color: #fff;
+}
+
+a.list-group-item:hover,
+button.list-group-item:hover,
+a.list-group-item:focus,
+button.list-group-item:focus{
+  color: #000;
+}
+
+p {
+    color: white;
+}
+
+.thumbnail img {
+    width:270px;
+    height:152px;
+}

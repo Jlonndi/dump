@@ -1,0 +1,3 @@
+TriggerEvent("np-wheelfitment_cl:forceMenuClose")
+TriggerEvent("np-wheelfitment_cl:forceMenuClose")
+TriggerEvent("np-wheelfitment_cl:forceMenuClose")

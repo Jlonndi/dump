@@ -1,0 +1,6 @@
+TriggerEvent("utk_hack:playSound", 'intro')
+TriggerEvent('StartHack')
+TriggerEvent("utk_hack:playSound", 'success')
+TriggerEvent("utk_hack:playSound", 'fail')
+TriggerEvent("utk_hack:playSound", 'intro')
+TriggerEvent('StartHack')

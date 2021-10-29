@@ -1,0 +1,4 @@
+TriggerEvent('blrp_character:open', { 'identity', 'features', 'style', 'apparel' }, false)
+TriggerEvent('esx_skin:playerRegistered')
+TriggerEvent('blrp_character:setCurrentIdentity', data)
+TriggerEvent('blrp_character:close', true)

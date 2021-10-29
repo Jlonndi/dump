@@ -1,0 +1,1 @@
+TriggerServerEvent('cb_vaulthack:server:callback', data.callback_id, data)

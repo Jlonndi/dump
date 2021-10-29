@@ -1,0 +1,6 @@
+TriggerEvent('DoLongHudText', _L("dances-out-of-range", "There are only %s dances, select a number inbetween or random (no input)
+TriggerEvent('DoLongHudText', _L("dances-disabled", "This dance is disabled")
+TriggerEvent('DoLongHudText', _L("dances-out-of-range", "There are only %s dances, select a number inbetween or random (no input)
+TriggerEvent('DoLongHudText', _L("dances-disabled", "This dance is disabled")
+TriggerEvent('DoLongHudText', _L("dances-out-of-range", "There are only %s dances, select a number inbetween or random (no input)
+TriggerEvent('DoLongHudText', _L("dances-disabled", "This dance is disabled")

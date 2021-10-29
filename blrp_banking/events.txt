@@ -1,0 +1,6 @@
+TriggerServerEvent('blrp_banking:server:openTransactions', data.account_number)
+TriggerServerEvent('blrp_banking:server:doTransaction', data)
+TriggerEvent('core:client:require', function(pointer)
+TriggerEvent('blrp_banking:client:setInterfaceVisibility', false)
+TriggerEvent('blrp_banking:client:setInterfaceVisibility', false)
+TriggerEvent('blrp_banking:client:setInterfaceVisibility', false)

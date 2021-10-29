@@ -1,0 +1,27 @@
+---- List of server events to allow a direct callback from the tablet
+---- This is a safety feature to prevent calling of server events that should not be called
+--local allowed_events = {
+--    'printReport'
+--}
+--
+--RegisterNUICallback('handleCallback', function(data, cb)
+--    print('hit')
+--    local event_name = data.event_name
+--    data.event_name = nil
+--    if allowed_events[event_name] then
+--        _G[event_name](data)
+--    end
+--    cb('ok')
+--end)
+--
+---- Print police report (report submitted by police)
+--function printReport(data)
+--    TriggerEvent('blrp_tablet:hide')
+--    TriggerEvent('printer:isNearPrinter', function(result)
+--        if result then
+--            TriggerServerEvent('core:server:printPdReport', data)
+--        else
+--            TriggerEvent('vrp:client:notify', 'Not near a printer')
+--        end
+--    end)
+--end

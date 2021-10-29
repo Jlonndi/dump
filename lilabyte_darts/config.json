@@ -1,0 +1,17 @@
+{
+    "darts": {
+        "x": 1992.94,
+        "y": 3050.18,
+        "z": 46.24
+    },
+    "text": {
+        "join_message": "Press ~INPUT_CONTEXT~ to ~q~play darts~w~",
+        "clear_message": "Press ~INPUT_VEH_EXIT~ to ~q~clear the board~w~",
+        "info_message": "Darts thrown: ~q~{{darts_thrown}}~w~\nBullseyes: ~q~{{bullseyes}}~w~\nPoints: ~q~{{points}}~w~",
+        "controls": {
+            "throw": "Throw",
+            "aim": "Aim",
+            "exit": "Exit"
+        }
+    }
+}

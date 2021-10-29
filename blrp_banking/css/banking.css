@@ -1,0 +1,90 @@
+html {
+  color-scheme: none !important;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: transparent;
+  display: none;
+}
+
+.jumbotron {
+  background: transparent;
+}
+
+* {
+  font-family: system-ui,
+             -apple-system, BlinkMacSystemFont,
+             "Segoe UI",
+             "Roboto",
+             "Oxygen",
+             "Ubuntu",
+             "Cantarell",
+             "Fira Sans",
+             "Droid Sans",
+             "Helvetica Neue",
+             Arial, sans-serif;
+}
+
+.bg-danger {
+  background-color: rgba(var(--bs-danger-rgb), 0.4) !important
+}
+
+.bg-success {
+  background-color: rgba(var(--bs-success-rgb), 0.4) !important
+}
+
+.logo {
+  height: 50px;
+  user-select: none;
+}
+
+.bank-main {
+  height: 65vh !important;
+  border: 1px solid #000;
+  border-radius: 5px;
+  background: var(--bs-body-bg);
+}
+
+.modal-backdrop {
+  max-width: 1320px;
+  max-height: 65vh;
+  top: 17.5vh;
+  left: calc((100% - 1320px) / 2);
+}
+
+.btn-bank {
+  color: white;
+  background-color: rgba(1, 104, 160, 255);
+}
+
+#accounts .card, #accounts .card > * {
+  user-select: none;
+  cursor: pointer;
+}
+
+.navbar {
+  margin-right: -0.75rem;
+  margin-left: -0.75rem;
+  margin-top: -1rem;
+}
+
+.scrollable {
+  padding-right: calc(var(--bs-gutter-x) * .3);
+  height: 100% !important;
+  overflow: auto;
+  height: 54vh !important;
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background-color: #191919;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background: #4e4e4e;
+  border-radius: 10px;
+}

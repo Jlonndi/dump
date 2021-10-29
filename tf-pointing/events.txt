@@ -1,0 +1,3 @@
+TriggerServerEvent('fetchPointingNatives')
+TriggerServerEvent('fetchPointingNatives')
+TriggerServerEvent('fetchPointingNatives')

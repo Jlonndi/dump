@@ -1,0 +1,2 @@
+TriggerServerEvent('InteractSound_SV:PlayOnOne', ply, sound, Config.SoundVolume)
+TriggerServerEvent('InteractSound_SV:PlayOnOne', ply, sound, Config.SoundVolume - 0.2)

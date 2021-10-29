@@ -1,0 +1,3 @@
+TriggerEvent("DoLongHudText","TYesef")
+TriggerEvent("DoLongHudText","TYesef")
+TriggerEvent("DoLongHudText","TYesef")

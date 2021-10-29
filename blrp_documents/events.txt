@@ -1,0 +1,5 @@
+TriggerServerEvent('documents:submitDocument', document)
+TriggerServerEvent('documents:ShowToPlayer', aPlayer, CURRENT_DOCUMENT)
+TriggerServerEvent('documents:cancelSubmit', current_document_id)
+TriggerServerEvent('documents:submitDocument', data)
+TriggerEvent('core:client:require', function(pointer)

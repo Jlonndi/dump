@@ -1,0 +1,1 @@
+TriggerEvent(iname..":proxy",key,args,proxy_callback)

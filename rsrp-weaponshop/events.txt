@@ -1,0 +1,1 @@
+TriggerServerEvent('RSRPWS:Server:SyncClerkPurchaseSpeech', clerkCoords)

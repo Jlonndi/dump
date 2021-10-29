@@ -1,0 +1,8 @@
+TriggerServerEvent("PaintBall:GetAllSessions")
+TriggerServerEvent("PaintBall:LeaveTheGame",currentPartie)
+TriggerServerEvent("PaintBall:LeaveTheGame",currentPartie)
+TriggerServerEvent("PaintBall:NewSession",data)
+TriggerServerEvent("PaintBall:JoinBlue",idx)
+TriggerServerEvent("PaintBall:JoinRed",idx)
+TriggerServerEvent("PaintBall:StartTheGame",idx)
+TriggerServerEvent("PaintBall:addPoint",currentTeam,currentPartie)

@@ -1,0 +1,6 @@
+TriggerEvent("DoShortHudText","Inside Vehicle.",2)
+TriggerEvent(('%s:hotreload')
+TriggerEvent("DoShortHudText","Inside Vehicle.",2)
+TriggerEvent(('%s:hotreload')
+TriggerEvent("DoShortHudText","Inside Vehicle.",2)
+TriggerEvent(('%s:hotreload')

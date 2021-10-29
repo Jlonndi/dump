@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>BLRP Inventory</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/w3color.js"></script>
+    <link href="css/roboto.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <script src="js/main.js"></script>
+</head>
+<body>
+
+<div class="main-inventory">
+    <div class="interaction-area" id="interaction-area" style="overflow: visible">
+        <div class="inventory row" id="inventory" >
+            <div class="items column" id="inventory-items">
+                <div class="grid-container" id="grid-container-inventory">
+                    <!-- Grid Items will be injected here -->
+                </div>
+            </div>
+            <div class="actions column2" id="action-panel">
+                <div id="weight-notinuse">
+
+                </div>
+                <div class="inventory-info">
+                    <!-- To quickly use an item, hover over and press enter-->
+                </div>
+                <div class="auto-close-timer">
+                    Inventory will auto close in <span id="timer-seconds">x</span>
+                    <br>
+                    <span style="color: deepskyblue">Use "0" quantity to transfer stacks</span>
+                </div>
+                <div class="cash-area">
+                    <img class="cash-image" src="images/cash.png" style="float: left">
+                    <div class="label-area">
+                        <span>$</span> <span id="cash_on_hand"></span><br>
+                    </div>
+                </div>
+                <div class="weight-area">
+                    <img class="cash-image" src="images/weight.png" style="float: left">
+                    <div class="label-area">
+                        <span id="weight"></span> / <span id="max_weight"></span> <span>(kg)</span> ⇦
+                    </div>
+                </div>
+                <div class="weight-area" id="storage-weight">
+                    <img class="cash-image" src="images/weight.png" style="float: left">
+                    <div class="label-area">
+                        <span id="storage_weight"></span> / <span id="storage_max_weight"></span> <span>(kg)</span> ⇨
+                    </div>
+                </div>
+                <!--            <div class="progress-area">-->
+                <!--                <div id="progress-bar" class="progress-filled" style="height:12px"></div>-->
+                <!--            </div>-->
+                <input id="quantity" type="number" name="quantity" class="quantity-input" value="1"/>
+                <div id="action-options">
+                    <!-- Action options will be automatically injected here -->
+                </div>
+                <div class="error-area">
+
+                </div>
+            </div>
+            <div class="items column storage-items" id="storage-items">
+                <div class="grid-container" id="grid-container-storage">
+                    <!-- Grid Items will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="inventory-meta-wrapper">
+        <div class="inventory-meta-content"></div>
+    </div>
+
+    <div class="hotbar">
+        <div id="inventory-hotbar">
+            <div class="grid-container-hotbar" id="grid-container-hotbar">
+                <!-- Grid Items will be injected here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="application/javascript">
+
+    let mode = 'inventory';
+    let interfaceShowing = false;
+    let items = [];
+    let storageItems = [];
+    let timerObject = null;
+    let currentTime = 20;
+    let selectedItem = null;
+    let selectedAutomaticItem = null;
+    // Automatic action detection for when a user pressed "e", it will try to check for a "use" option
+    let tryAutomaticAction = false;
+    let cooldownLock = false;
+    let automaticCooldownLock = false;
+    let storageName = null;
+    let inventoryPacket = null;
+    let storagePacket = null;
+    let cash = null;
+
+    window.addEventListener('message', event => {
+        if(!event.data) return false;
+        if(event.data.type === 'inventory:init') {
+            mode = 'inventory'
+            console.log('starting inventory in init mode')
+            if(!event.data.packet.char_number) return
+            if(event.data.packet.char_number === getCharId()) return
+            setCharId(event.data.packet.char_number)
+            showInterface(event.data.packet, true)
+            hideAllHotbar()
+        } else if(event.data.type === 'inventory:toggle') {
+            if (event.data.enable === true && event.data.packet) {
+                if (event.data.packet) {
+                    mode = !event.data.packet.mode ? 'inventory' : event.data.packet.mode;
+                }
+                //console.log('current mode is ', mode);
+                //console.log('show event triggered', event.data);
+                $("body").css('display', "flex");
+                showInterface(event.data.packet);
+            } else if (event.data.enable === false) {
+                $("body").css('display', "none");
+                hideInterface();
+            }
+        } else if (event.data.type === 'inventory:send:actions') {
+            event.data.actions.sort(compareOptions);
+
+            fillActions(event.data.actions);
+        } else if (event.data.type === 'inventory:send:setItemSelected') {
+            setItemSelected(event.data.hotbar_number);
+        }
+    });
+
+    function showAllHotbar() {
+        let allSlots = $('#grid-container-hotbar').children()
+        for (let slot of allSlots) {
+            $(slot).addClass('selected-hotbar')
+        }
+    }
+
+    function hideAllHotbar() {
+        let allSlots = $('#grid-container-hotbar').children()
+        for (let slot of allSlots) {
+            $(slot).removeClass('selected-hotbar')
+        }
+    }
+
+    function setItemSelected(hotbar_number) {
+        let allSlots = $('#grid-container-hotbar').children()
+        for (let slot of allSlots) {
+            $(slot).removeClass('selected-hotbar')
+        }
+        let slot = $('#grid-container-hotbar').find(`[data-hotbarPosition="${hotbar_number}"]`)[0]
+        $(slot).addClass('selected-hotbar').after(() => {
+            setTimeout(() => {
+                if(!interfaceShowing) $(slot).removeClass('selected-hotbar')
+            }, 2000)
+        })
+        // if ($(slot).hasClass('selected-hotbar')) {
+        //     $(slot).removeClass('selected-hotbar');
+        // } else {
+        //     $(slot).addClass('selected-hotbar');
+        // }
+    }
+
+    function compareOptions(a, b) {
+      return a.order - b.order;
+    }
+
+    document.onkeydown = evt => {
+        if(!interfaceShowing) return false;
+        evt = evt || window.event;
+        // if [escape, o, w, i] pressed then hide interface
+        if (evt.keyCode === 27 || evt.keyCode === 79 || evt.keyCode === 87 || evt.keyCode === 73) {
+            hideInterface();
+        }
+        if (evt.keyCode === 69) { // e key
+            tryAutomaticAction = true;
+            if(selectedAutomaticItem) {
+                if(automaticCooldownLock) return false;
+                automaticCooldownLock = true;
+                setTimeout(() => {
+                    automaticCooldownLock = false;
+                }, 350);
+                //console.log('trying automatic action', selectedAutomaticItem);
+                playPickUpSound();
+                requestItemActions(selectedAutomaticItem);
+            }
+            return false;
+        }
+    };
+
+    function setCash(amount) {
+        cash = amount
+        $('#cash_on_hand').html(amount.toLocaleString());
+    }
+
+    // @param is_init used to determine if it's player spawn, to load and show hotbar
+    function showInterface(packet = null, is_init = false) {
+        setTimeout(() => {
+            $("#quantity").focus();
+        }, 300);
+
+        if(!interfaceShowing) {
+            $("#quantity").val(1);
+        }
+
+        if (mode === 'inventory') {
+            $('#storage-items').hide();
+            $('#storage-weight').hide();
+            $('.inventory').css('width', '920');
+            setCash(parseInt(packet.cash))
+            $('#weight').html(packet.inventory.weight.toFixed(2));
+            $('#max_weight').html(packet.inventory.max_weight);
+            let percentWeight = getRealPercentage(packet.inventory.max_weight, packet.inventory.weight);
+            animateColorPercent('#progress-bar', percentWeight, 750);
+            createInventory(packet.inventory.items);
+            inventoryPacket = packet.inventory;
+        }
+        if(mode === 'transfer') {
+            if(!is_init) $('#storage-weight').show();
+            $('#storage_weight').html();
+            $('#storage_max_weight').html(packet.chest.max_weight);
+            $('#weight').html(packet.inventory.weight.toFixed(2));
+            $('#max_weight').html(packet.inventory.max_weight);
+            if(!is_init) $('#storage-items').show();
+            $('.inventory').css('width', '1620');
+            storagePacket = packet.chest;
+            storagePacket.max_weight = Math.round(storagePacket.max_weight * 10) / 10
+            storageName = packet.chest.chest_name;
+            inventoryPacket = packet.inventory;
+            createInventory(packet.inventory.items, packet.chest.items);
+        }
+        if (is_init) {
+            $("#quantity").val(1);
+            console.log('opening inventory in init mode')
+            updateHotkeySlotsOnServer();
+        }
+        if (!is_init) {
+            showAllHotbar();
+            setStartAutoClose();
+            interfaceShowing = true;
+            $('#inventory').fadeIn(200);
+            $(".interaction-area").css("display", "flex");
+        }
+
+    }
+
+    function shouldPreventTransfer() {
+        let should_prevent = !storagePacket.allow_transfer_from_storage;
+        console.log('should prevent is', should_prevent)
+        return should_prevent
+    }
+    /**
+     * Cleanup
+     */
+    function hideInterface() {
+        if (interfaceShowing) escapeInterface(mode, storageName);
+        selectedItem = null;
+        clearInterval(timerObject);
+        timerObject = null;
+        interfaceShowing = false;
+        tryAutomaticAction = false;
+        storageItems = [];
+        items = [];
+        storagePacket = null;
+        inventoryPacket = null;
+        hideAllHotbar();
+        $('.inventory-meta-content').fadeOut(200);
+        $('#inventory').fadeOut(200);
+        $(".interaction-area").css("display", "flex");
+        $('.grid-container').empty();
+        $('.grid-item-real').remove();
+        $('#action-options').html('');
+    }
+
+    function createInventory(server_items = null, server_storage_items = null) {
+        items = getInventoryItems(server_items);
+        $('#grid-container-inventory').empty();
+        for (const item of items) {
+            if(!item) continue;
+            $('#grid-container-inventory').append(parseItemHtml(item));
+        }
+        // createHotbar()
+        if (server_storage_items) {
+            storageItems = getStorageItems(server_storage_items, storageName);
+            storagePacket.weight = 0;
+            for (const item of storageItems) {
+                if(!item || !item.amount ||item.amount === 0) continue;
+                storagePacket.weight += item.amount * item.weight;
+            }
+            $('#storage_weight').html(storagePacket.weight.toFixed(2))
+            $('#grid-container-storage').empty();
+            for (const item of storageItems) $('#grid-container-storage').append(parseItemHtml(item));
+        }
+        registerMoveHandler();
+        updateHotkeySlotsOnServer();
+    }
+
+    function registerMoveHandler() {
+        $('.grid-item-real').draggable({
+            helper: 'clone',
+            appendTo: 'body',
+            revert: true,
+            revertDuration: 1,
+            start: function (event, ui) {
+                playPickUpSound();
+                const id = $(this).data('identifier');
+                $('.grid-item-real').removeClass('selected');
+                $(this).addClass('selected');
+                requestItemActions(items[id]);
+                const quantity = $('#quantity').val()
+                const clone = $(ui.helper).find($("span[class='span-amount']"))[0]
+                $(clone).text(quantity);
+                $(this).draggable('instance').offset.click = {
+                    left: Math.floor(ui.helper.width() / 2),
+                    top: Math.floor(ui.helper.height() / 2) + 25
+                };
+            },
+            stop: function(event) {
+                let el = document.elementFromPoint(event.pageX, event.pageY);
+                if ($(el).attr('data-actionName')) {
+                    const itemCode = $(event.target).attr('data-itemCode')
+                    const item = items.find(i => i && i.idname === itemCode)
+                    doAction($(el).attr('data-actionName'), $(event.target).attr('data-itemCode'), $('#quantity').val(), true, item.meta)
+                } else {
+                    moveItem(event.target, el);
+                }
+            },
+        });
+    }
+
+    function moveItem(fromElement, toElement) {
+        //console.log('items', items);
+        let modifyReplacedElement = fromElement; // Always the correct element
+        let modifyTargetElement = null;
+        const currentItemId = $(fromElement).attr('data-identifier');
+        if ($(toElement).hasClass('grid-item')) { // Not always the correct element, lets find it
+            modifyTargetElement = toElement;
+        } else if ($(toElement).hasClass('item-image')) {
+            modifyTargetElement = toElement.parentElement;
+        } else if ($(toElement).hasClass('ghosted')) {
+            modifyTargetElement = toElement.parentElement;
+        } else if ($(toElement).hasClass('span-name')) {
+            modifyTargetElement = toElement.parentElement.parentElement;
+        } else if ($(toElement).hasClass('item-name')) {
+            modifyTargetElement = toElement.parentElement;
+        } else if ($(toElement).hasClass('slot-image')) {
+            modifyTargetElement = toElement.parentElement.parentElement;
+        }
+
+        //console.log('-------------------------------');
+        //console.log('Moving element', fromElement);
+        //console.log('dropping at element', modifyTargetElement);
+
+        if (!modifyTargetElement) {
+            //console.log('no target element found');
+            return false;
+        }
+
+        let toContainer = modifyTargetElement.parentElement.parentElement;
+        let fromContainer = modifyReplacedElement.parentElement.parentElement;
+        const toContainerName = $(toContainer).attr('id');
+        const fromContainerName = $(fromContainer).attr('id');
+        let quantity = parseInt($('#quantity').val());
+
+        // Moving to a different inventory
+        if (toContainerName !== fromContainerName) {
+            if ($(toContainer).attr('id') === 'inventory-items') {
+                //console.log('Moving item from storage to inventory');
+
+
+                if(shouldPreventTransfer()) {
+                    return showError('Hand Slipped')
+                }
+                const itemBeingMovedCode = $(fromElement).attr('data-itemCode');
+                const itemBeingMovedId = storageItems.findIndex(i => i && i.idname === itemBeingMovedCode);
+                const itemBeingMoved = storageItems[itemBeingMovedId];
+                if(!itemBeingMoved) showError('Unknown error @i:294')
+                const isMovingToItself = $(modifyTargetElement).attr('data-itemCode') && $(modifyTargetElement).attr('data-itemCode') === itemBeingMoved.idname;
+                if(!$(modifyTargetElement).attr('data-isNone') && isMovingToItself === false) return showError('Can not replace items when transferring');
+
+                if(quantity < 1) quantity = itemBeingMoved.amount
+                if(itemBeingMoved.amount < quantity) return showError('Not enough items');
+                const possibleTargetItemIndex = items.findIndex(i => i && i.idname === itemBeingMoved.idname)
+
+                console.log('item being moved', itemBeingMoved.id, itemBeingMoved.idname)
+                const totalItemWeight = itemBeingMoved.weight * quantity;
+                const newWeight = totalItemWeight + inventoryPacket.weight;
+                console.log('ignore weight is set to', storagePacket.ignore_inventory_weight)
+                if(! storagePacket.ignore_inventory_weight) {
+                    if(newWeight > inventoryPacket.max_weight) return showError('Not enough room');
+                }
+                inventoryPacket.weight = newWeight;
+                $('#weight').html(newWeight.toFixed(2));
+
+                storagePacket.weight = storagePacket.weight - (itemBeingMoved.weight * (quantity));
+                $('#storage_weight').html(storagePacket.weight.toFixed(2));
+
+                if (possibleTargetItemIndex > -1) {
+                    // This seems to be working perfectly
+                    items[possibleTargetItemIndex].amount += quantity;
+                    items[possibleTargetItemIndex].container = storageName;
+                } else {
+                    // This seems to be causing some issues
+                    let itemBeingMovedClone = Object.assign({}, itemBeingMoved);
+                    itemBeingMovedClone.amount = quantity;
+                    itemBeingMovedClone.container = storageName;
+                    let newPosition = $(modifyTargetElement).attr('data-position')
+                    items[newPosition] = itemBeingMovedClone;
+                    items[newPosition].id = newPosition
+                    items[newPosition].position = newPosition
+                }
+
+                itemBeingMoved.amount -= quantity
+
+                if (itemBeingMoved.amount < 1) {
+                    $(modifyReplacedElement).replaceWith(parseItemHtml(makeEmptyItem($(modifyReplacedElement).attr('data-position'))));
+                    delete storageItems[itemBeingMovedId];
+                } else {
+                    $(modifyReplacedElement).replaceWith(parseItemHtml(itemBeingMoved));
+                }
+                if (possibleTargetItemIndex > -1) {
+                    let existingTargetElement = $(toContainer).find(`[data-slotCode='${items[possibleTargetItemIndex].idname}']`)[0]
+                    existingTargetElement.outerHTML = parseItemHtml(items[possibleTargetItemIndex]);
+                } else {
+                    const targetItemIndex = items.findIndex(i => i && i.idname === itemBeingMoved.idname);
+                    items[targetItemIndex].position = $(modifyTargetElement).attr('data-position');
+                    items[targetItemIndex].price = false
+                    $(modifyTargetElement).replaceWith(parseItemHtml(items[targetItemIndex]));
+
+                }
+
+                performMoveToInventory(itemBeingMoved.idname, quantity, storageName, itemBeingMoved.meta);
+                registerMoveHandler();
+                saveInventoryOrder('inventory', items);
+                saveInventoryOrder(storageName, storageItems);
+                updateHotkeySlotsOnServer();
+            }
+
+            if ($(toContainer).attr('id') === 'storage-items') {
+                //console.log('Moving item from inventory to storage');
+                const itemBeingMovedId = $(fromElement).attr('data-identifier');
+                const itemBeingMoved = items[itemBeingMovedId];
+                if(quantity < 1) quantity = itemBeingMoved.amount
+                if(itemBeingMoved.amount < quantity) return showError('Not enough items');
+                const possibleTargetItemIndex = storageItems.findIndex(i => i && i.idname === itemBeingMoved.idname)
+                const isMovingToItself = $(modifyTargetElement).attr('data-itemCode') && $(modifyTargetElement).attr('data-itemCode') === itemBeingMoved.idname;
+                if(!$(modifyTargetElement).attr('data-isNone') && isMovingToItself === false) return showError('Can not replace items when transferring');
+
+                if(storagePacket.properties && storagePacket.properties.whitelisted_items) {
+                    let allow_movement = false
+
+                    for(const check_item_name of storagePacket.properties.whitelisted_items) {
+                        if(check_item_name == "printed_paper" && itemBeingMoved.idname.includes("printed_paper")) {
+                            allow_movement = true
+                        } else if(check_item_name == itemBeingMoved.idname) {
+                            allow_movement = true
+                        } else if(itemBeingMoved.idname.includes(check_item_name)) {
+                            allow_movement = true
+                        }
+                    }
+
+                    if(!allow_movement) {
+                      return showError('Can not put that in here')
+                    }
+                }
+
+                //console.log('itemBeingMoved.weight, quantity, storagePacket.weight', itemBeingMoved.weight, quantity, storagePacket.weight)
+                const totalItemWeight = itemBeingMoved.weight * quantity;
+                const newWeight = totalItemWeight + storagePacket.weight;
+                if(newWeight > storagePacket.max_weight) return showError('Not enough room');
+                storagePacket.weight = newWeight;
+                $('#storage_weight').html(newWeight.toFixed(2));
+
+                inventoryPacket.weight = inventoryPacket.weight - (itemBeingMoved.weight * (quantity));
+                $('#weight').html(inventoryPacket.weight.toFixed(2));
+
+
+                if (possibleTargetItemIndex !== -1) {
+                    storageItems[possibleTargetItemIndex].amount += quantity;
+                    storageItems[possibleTargetItemIndex].container = storageName;
+                } else {
+                    let itemBeingMovedClone = Object.assign({}, itemBeingMoved);
+                    itemBeingMovedClone.amount = quantity;
+                    itemBeingMovedClone.container = storageName;
+                    let newPosition = $(modifyTargetElement).attr('data-position')
+                    storageItems[newPosition] = itemBeingMovedClone;
+                    storageItems[newPosition].id = newPosition
+                    storageItems[newPosition].position = newPosition
+                }
+
+                itemBeingMoved.amount -= quantity
+
+                if (itemBeingMoved.amount < 1) {
+                    $(modifyReplacedElement).replaceWith(parseItemHtml(makeEmptyItem($(modifyReplacedElement).attr('data-position'))));
+                    items[itemBeingMovedId] = makeEmptyItem($(modifyReplacedElement).attr('data-position'));
+                } else {
+                    $(modifyReplacedElement).replaceWith(parseItemHtml(itemBeingMoved));
+                }
+                if (possibleTargetItemIndex > -1) { // target spot has an existing item
+                    let existingTargetElement = $(toContainer).find(`[data-slotCode='${storageItems[possibleTargetItemIndex].idname}']`)[0]
+                    existingTargetElement.outerHTML = parseItemHtml(storageItems[possibleTargetItemIndex]);
+                    storageItems[possibleTargetItemIndex].position = $(modifyTargetElement).attr('data-position');
+                } else { // target spot does not have existing item
+                    const targetItemIndex = storageItems.findIndex(i => i && i.idname === itemBeingMoved.idname);
+                    $(modifyTargetElement).replaceWith(parseItemHtml(storageItems[targetItemIndex]));
+                    storageItems[targetItemIndex].position = $(modifyTargetElement).attr('data-position');
+
+                }
+                performMoveToStorage(itemBeingMoved.idname, quantity, storageName, itemBeingMoved.meta);
+                registerMoveHandler();
+                saveInventoryOrder('inventory', items);
+                saveInventoryOrder(storageName, storageItems);
+                updateHotkeySlotsOnServer();
+            }
+
+        }
+
+        // Moving to the same inventory
+        if (toContainerName === fromContainerName) {
+            // Moving to a blank spot
+            if ($(modifyTargetElement).attr('data-isNone')) {
+                const newPosition = $(modifyTargetElement).attr('data-position');
+                if (fromContainerName === 'inventory-items') { // Moving an item within the inventory panel
+                    const item = items[$(fromElement).attr('data-identifier')];
+                    let oldPosition = item.position;
+                    items[item.id].position = newPosition;
+                    $(modifyReplacedElement).replaceWith(parseItemHtml(makeEmptyItem(oldPosition)));
+                    modifyTargetElement.outerHTML = parseItemHtml(items[item.id]);
+                    updateHotkeySlotsOnServer();
+                    saveInventoryOrder('inventory', items);
+                } else { // Moving an item within the storage panel
+                    const item = storageItems[currentItemId];
+                    let oldPosition = parseInt(item.position);
+                    storageItems[item.id].position = parseInt(newPosition);
+                    // console.log(oldPosition, JSON.stringify(oldPosition))
+                    $(modifyReplacedElement).replaceWith(parseItemHtml(makeEmptyItem(oldPosition)));
+                    modifyTargetElement.outerHTML = parseItemHtml(storageItems[item.id]);
+                    // drawHotbar();
+                    saveInventoryOrder(storageName, storageItems);
+                }
+                registerMoveHandler();
+            } else {
+                // If replacing another item
+                const item = items[currentItemId];
+                const itemBeingSwitchedId = $(modifyTargetElement).attr('data-identifier');
+                const itemBeingSwitched = items[itemBeingSwitchedId];
+                // console.log(`${itemBeingSwitched.id} compared to ${item.id}`);
+                if(itemBeingSwitched.id === item.id) {
+                    console.info('can not overlap the same item');
+                    return;
+                }
+                items[item.id].position = parseInt($(modifyTargetElement).attr('data-position'));
+                items[itemBeingSwitchedId].position = parseInt($(fromElement).attr('data-position'));
+                const elItemBeingMoved = $("div").find(`[data-slotCode='${item.idname}']`)[0];
+                const elItemBeingReplaced = $("div").find(`[data-slotCode='${itemBeingSwitched.idname}']`)[0];
+                //console.log('elItemBeingMoved', elItemBeingMoved);
+                //console.log('elItemBeingReplaced', elItemBeingReplaced);
+                $(elItemBeingMoved).replaceWith(parseItemHtml(items[itemBeingSwitchedId]));
+                $(elItemBeingReplaced).replaceWith(parseItemHtml(items[item.id]));
+                // modifyTargetElement.outerHTML = parseItemHtml(item);
+                drawHotbar();
+                registerMoveHandler();
+                if (fromContainerName === 'inventory-items') {
+                    updateHotkeySlotsOnServer();
+                    saveInventoryOrder('inventory', items);
+                } else {
+                    saveInventoryOrder(storageName, storageItems);
+                }
+            }
+        }
+
+    }
+
+    // function reorderIndexByPosition() {
+    //     for(let i in items) {
+    //         if(items[i].position != i) {
+    //             let clone = Object.assign({}, items[i])
+    //             items[parseInt(clone.position)] = clone
+    //             console.log('found item with misorderd position', items[i].position, i)
+    //         }
+    //     }
+    // }
+
+    function drawHotbar() {
+        // let hotbar = []
+        // let currentSlot = 0
+        // updateHotkeySlotsOnServer();
+        // console.log('drawing hotbar')
+        // $('#grid-container-hotbar').html('');
+        // for (const item of sortItemsByPosition(items)) {
+        //     if(currentSlot >= 5) continue
+        //     currentSlot++
+        //     // if(!item) continue;
+        //     $('#grid-container-hotbar').append(parseItemHtml(item, true));
+        // }
+    }
+
+    function updateHotkeySlotsOnServer() {
+        let hotkeys = [];
+        $('#grid-container-hotbar').html('');
+        for (let i = 0; i < 5; i++) {
+            let item = items.find(item => item && item.amount && item.amount && item.position == i);
+            if(item && item.idname) {
+                item.hotbar_position = i + 1
+                $('#grid-container-hotbar').append(parseItemHtml(item, true))
+                hotkeys[i] = {idname: item.idname, action_name: 'auto'}
+            } else {
+                const fake = {idname: 'empty', action_name: 'auto', hotbar_position: i + 1}
+                $('#grid-container-hotbar').append(parseItemHtml(fake, true))
+                hotkeys[i] = {idname: 'empty', action_name: 'auto'}
+            }
+        }
+        showAllHotbar();
+        setItemSlots(hotkeys);
+    }
+
+    function calcWeight() {
+        //console.log('calcWeight CALLED')
+        inventoryPacket.weight = 0;
+        for (const item of items) {
+            if(!item) continue;
+            if(!item.amount ||item.amount === 0) continue;
+            inventoryPacket.weight += item.amount * item.weight;
+        }
+        $('#weight').val(inventoryPacket.weight .toFixed(2))
+
+        if (storageItems.length > 1) {
+            storagePacket.weight = 0
+            for (const item of storageItems) {
+                if(!item || !item.amount || item.amount === 0) continue;
+                //console.log(`parsing storage weight - adding ${item.amount * item.weight} to ${storagePacket.weight}`, item)
+                storagePacket.weight += item.amount * item.weight;
+            }
+            $('#storage_weight').val(storagePacket.weight.toFixed(2))
+        }
+    }
+
+    $('#inventory').on('mouseenter mouseleave', '.grid-item-fake', function(event) {
+        // $('.inventory-meta-content').hide(200);
+    });
+
+    $('#inventory').on('mouseenter mouseleave', '.grid-item-real', function(event) {
+
+    });
+
+    $('body').delegate('.grid-item-real', 'click', function () {
+        if (mode === 'inventory') {
+            const id = $(this).data('identifier');
+            selectedItem = items[id];
+            if (selectedItem && selectedItem.idname) {
+                requestItemActions(items[id]);
+                $('.grid-item-real').removeClass('selected');
+                $(this).addClass('selected');
+                // fillActions(['Use'])
+            }
+        }
+
+        let targetContainerName = $(this.parentElement).attr('id')
+
+        if (targetContainerName === 'grid-container-inventory') {
+            const id = $(this).data('identifier');
+            selectedAutomaticItem = items[id];
+            if(selectedAutomaticItem) {
+                if (selectedAutomaticItem.meta) showMetaInformation(selectedAutomaticItem)
+                if (!selectedAutomaticItem.meta) $('.inventory-meta-content').hide(200);
+            }
+        }
+
+        if (targetContainerName === 'grid-container-storage') {
+            const id = $(this).data('identifier');
+            selectedAutomaticItem = storageItems[id];
+            if(selectedAutomaticItem) {
+                if(selectedAutomaticItem.meta) showMetaInformation(selectedAutomaticItem)
+                if(!selectedAutomaticItem.meta)  $('.inventory-meta-content').hide(200);
+            }
+        }
+    });
+
+    $('body').delegate('.option-item', 'click', function () {
+        if(mode !== 'inventory') return;
+        doAction($(this).attr('data-actionName'), selectedItem.idname, $('#quantity').val(), false, selectedItem.meta)
+    });
+
+
+
+    function fillActions(actions) {
+        // if (tryAutomaticAction) {
+        //     //console.log('filled actions, trying action now', actions);
+        //     tryAutomaticAction = false;
+        //     if(!actions[0]) return false;
+        //     for (const action of actions) {
+        //         if(action !== 'Give' && action !== 'Trash') {
+        //             //console.log('Trying to do... ', action, selectedAutomaticItem.idname, 1);
+        //             doAction(action, selectedAutomaticItem.idname, 1);
+        //             hideInterface();
+        //             return true;
+        //         }
+        //     }
+        // }
+        let actionOptionsEntity = $('#action-options');
+        let addAutoClose = ['Eat', 'Drink', 'Turn On', 'Use', 'Take', 'Smoke', 'Pick Vehicle', 'Equip'];
+        actionOptionsEntity.html('');
+        for (const action_data of actions) {
+            let action_name = action_data.name
+
+            if (action_name !== 'Give' && action_name !== 'Trash') {
+                actionOptionsEntity.append(parseOptionHtml(action_name));
+                if (addAutoClose.includes(action_name)) {
+                    actionOptionsEntity.append(parseOptionHtml(action_name + ' & Close'));
+                }
+            }
+        }
+        if (mode === 'inventory') {
+            actionOptionsEntity.append(parseOptionHtml('Give'));
+            actionOptionsEntity.append(parseOptionHtml('Trash'));
+        }
+    }
+
+    function doAction(actionName, itemCode, amount = 1, hideActions = false, meta) {
+        // If amount is = 0, then use all items
+        if(amount === 0) {
+            const item = items.find(i => i.idname === itemCode);
+            if(!item) return false;
+            amount = item.amount;
+        }
+        if(cooldownLock) return false;
+        cooldownLock = true;
+        setTimeout(() => {
+            cooldownLock = false;
+        }, 400);
+        if (hideActions) {
+            if (!selectedItem) {
+                $('#action-options').html('');
+                $('.grid-item-real').removeClass('selected');
+            }
+        }
+        if (actionName && itemCode) {
+            playTickSound();
+            performItemAction(actionName, itemCode, amount, meta);
+            if (actionName.includes(' & Close')) {
+                hideInterface();
+            }
+        }
+    }
+
+    function setStartAutoClose() {
+        currentTime = 180; // how long we should keep the inventory open for (in seconds)
+        if(timerObject) return false;
+        timerObject = setInterval(() => {
+            currentTime = currentTime - 1;
+            $('#timer-seconds').html(currentTime);
+            if (currentTime === 0) hideInterface();
+        }, 1000)
+    }
+
+    function showError(message) {
+        $('.error-area').show(200);
+        $('.error-area').text(message);
+        setTimeout(() => {
+            $('.error-area').hide(200);
+        }, 2000);
+    }
+
+    function requestItemActions(item) {
+        if(mode !== 'inventory') return false;
+        performRequestItemActions(item);
+    }
+
+    function showMetaInformation(item) {
+        let html = ``
+        let style = ``
+        for (const key in item.meta) {
+            let value = item.meta[key]
+            let title = null
+            if(key === 'weapon_type') title = 'Weapon Caliber'
+            if(key === 'evidence_id') title = 'Evidence Identifier'
+            if(key === 'found_at') title = 'Found At'
+            if(key === 'dna_sequence') title = 'DNA Sequence'
+            if(key === 'registration') title = 'Serial Number'
+            if(key === 'analyzed_match') title = 'Analyzed Fingerprint Match'
+            if(key === 'components') title = 'Components / Attachments'
+            if(key === 'document_title') title = 'Document Type / Title'
+            if(key === 'signed_by') title = 'Document Signed By'
+            if(key === 'display_name') title = 'Name'
+            if(key === 'primary_color') {
+                title = 'Identified (P) Color'
+                let color = item.meta[key]
+                let color_name = `rgba(${color.r}, ${color.g}, ${color.b}, 100)`;
+                style = `color: ${color_name}; font-weight: bolder;`
+                value = 'Color Representation'
+            }
+            if(key === 'mail_address') title = "Address"
+            if(key === 'mail_to') title = "To"
+            if(key === 'mail_from') title = "From"
+            if(key === 'evidence_bin_label') title = "Label"
+            if(key === 'evidence_bin_id') title = "Evidence Bin ID"
+            if(key === 'ticket_character_name') title = "Issued to"
+            if(key === 'togo_bag_label') title = "Label"
+            if(key === 'name_display') title = "Furniture Name"
+            if(key === 'bank_draft_recipient_name' || key === 'lawyer_ticker_recipient_name') title = "Payable To"
+            if(key === 'bank_draft_amount_formatted') title = "Pay to the order of"
+            if(key === 'lawyer_ticket_client_count') title = "Number of Clients"
+
+            if(title === null) continue;
+            html += `
+                    <div class="meta-pair">
+                        <span class="meta-key">${title}</span>
+                        <span class="meta-value" style="${style}">${value}</span>
+                    </div>
+                `
+        }
+
+        if(html !== ``) {
+          $('.inventory-meta-content').show(200);
+          $('.inventory-meta-content').html(html)
+        }
+    }
+
+    function textToClipboard(text) {
+        let copyText = document.getElementById("myInput");
+
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+
+        document.execCommand("copy");
+    }
+
+</script>
+
+
+
+
+</body>
+</html>

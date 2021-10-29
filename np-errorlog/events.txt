@@ -1,0 +1,3 @@
+TriggerServerEvent("NP:LogClientError", resource, ...)
+TriggerServerEvent("NP:LogClientError", resource, ...)
+TriggerServerEvent("NP:LogClientError", resource, ...)

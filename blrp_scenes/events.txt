@@ -1,0 +1,7 @@
+TriggerServerEvent('blrp_scenes:add', coords, message, color, distance)
+TriggerServerEvent('blrp_scenes:delete', scene)
+TriggerServerEvent('blrp_scenes:fetch')
+TriggerEvent("vrp:client:notify", "Scene Created")
+TriggerEvent("vrp:client:notify", "Scenes Disabled")
+TriggerEvent("vrp:client:notify", "Scenes Enabled")
+TriggerEvent("vrp:client:notify", "Scene Deleted")

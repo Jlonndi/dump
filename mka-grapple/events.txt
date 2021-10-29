@@ -1,0 +1,6 @@
+TriggerServerEvent('mka-grapple:destroyRope', grappleId)
+TriggerServerEvent('mka-grapple:createRope', grappleId, dest)
+TriggerServerEvent('mka-grapple:destroyRope', grappleId)
+TriggerServerEvent('mka-grapple:createRope', grappleId, dest)
+TriggerServerEvent('mka-grapple:destroyRope', grappleId)
+TriggerServerEvent('mka-grapple:createRope', grappleId, dest)

@@ -1,0 +1,9 @@
+TriggerServerEvent("mka-lasers:save", laser)
+TriggerEvent('chat:addSuggestion', '/lasers', '', {
+      {name="command", help="{start, end, save} (required)
+TriggerServerEvent("mka-lasers:save", laser)
+TriggerEvent('chat:addSuggestion', '/lasers', '', {
+      {name="command", help="{start, end, save} (required)
+TriggerServerEvent("mka-lasers:save", laser)
+TriggerEvent('chat:addSuggestion', '/lasers', '', {
+      {name="command", help="{start, end, save} (required)

@@ -1,0 +1,1 @@
+TriggerEvent('vt_core:NUI:controls', false)

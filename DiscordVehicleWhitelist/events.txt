@@ -1,0 +1,6 @@
+TriggerServerEvent("FaxDisVeh:CheckPermission", src)
+TriggerServerEvent("FaxDisVeh:CheckPermission", src)
+TriggerEvent('chat:addMessage', {color = { 255, 0, 0}, multiline = true, args = {"Me", "Requires perm = " .. tostring(i)
+TriggerEvent('chat:addMessage', {color = { 255, 0, 0}, multiline = true, args = {"Me", "RequiredPerm != nil"}})
+TriggerEvent('chat:addMessage', {color = { 255, 0, 0}, multiline = true, args = {"Me", "hasPerm = true"}})
+TriggerEvent('chat:addMessage', {color = { 255, 0, 0}, multiline = true, args = {"Me", "Value of hasPerm = " .. tostring(hasPerm)

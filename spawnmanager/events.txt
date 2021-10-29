@@ -1,0 +1,3 @@
+TriggerServerEvent('instance:enterInstance', 'initspawn', true)
+TriggerEvent('playerSpawned', spawn)
+TriggerEvent('playerSpawned', spawn)

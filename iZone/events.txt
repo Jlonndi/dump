@@ -1,0 +1,6 @@
+TriggerServerEvent("izone:savedb", nameZone)
+TriggerServerEvent('testtest')
+TriggerServerEvent("izone:addpoint", tostring(x)
+TriggerEvent("izone:notification","Zone/Point non sauvegardé", false)
+TriggerEvent("izone:notification", "Zone/Point enregistré", true)
+TriggerEvent("izone:notification", "Point ajouté ".. "x = "..tostring(math.ceil(x)

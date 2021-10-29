@@ -1,0 +1,2 @@
+TriggerEvent('rcore_pool:setupTable', 'BALL_SETUP_8_BALL')
+TriggerEvent('rcore_pool:setupTable', 'BALL_SETUP_STRAIGHT_POOL')

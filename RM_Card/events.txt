@@ -1,0 +1,1 @@
+TriggerEvent('chat:addSuggestion', '/miranda', 'RM / Open Miranda Card')

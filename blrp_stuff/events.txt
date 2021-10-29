@@ -1,0 +1,1 @@
+TriggerEvent('gundraw:client:isHolstered', function(holstered)

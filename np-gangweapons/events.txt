@@ -1,0 +1,6 @@
+TriggerServerEvent("np-weapons:checkinventory", "Ranch Main - 5mil")
+TriggerServerEvent('CheckMoneyForWeaGang',GetHashKey(button.model)
+TriggerServerEvent("np-weapons:checkinventory", "Ranch Main - 5mil")
+TriggerServerEvent('CheckMoneyForWeaGang',GetHashKey(button.model)
+TriggerServerEvent("np-weapons:checkinventory", "Ranch Main - 5mil")
+TriggerServerEvent('CheckMoneyForWeaGang',GetHashKey(button.model)

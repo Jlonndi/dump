@@ -1,0 +1,28 @@
+TriggerEvent('chat:addSuggestion', '/postal', 'Set the GPS to a specific postal',
+             { { name = 'Postal Code', help = 'The postal code you would like to go to' } })
+TriggerEvent('chat:addMessage', {
+                color = { 255, 0, 0 },
+                args = {
+                    'Postals',
+                    config.blip.deleteText
+                }
+            })
+TriggerEvent('chat:addMessage', {
+            color = { 255, 0, 0 },
+            args = {
+                'Postals',
+                format(config.blip.drawRouteText, foundPostal.code)
+TriggerEvent('chat:addMessage', {
+            color = { 255, 0, 0 },
+            args = {
+                'Postals',
+                config.blip.notExistText
+            }
+        })
+TriggerEvent('chat:addMessage', {
+                color = { 255, 0, 0 },
+                args = {
+                    'Postals',
+                    "You've reached your postal destination!"
+                }
+            })

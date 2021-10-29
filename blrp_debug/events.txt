@@ -1,0 +1,1 @@
+TriggerEvent('core:client:require', function(pointer)

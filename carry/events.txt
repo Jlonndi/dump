@@ -1,0 +1,2 @@
+TriggerServerEvent("CarryPeople:sync",targetSrc)
+TriggerServerEvent("CarryPeople:stop",carry.targetSrc)

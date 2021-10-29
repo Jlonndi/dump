@@ -1,0 +1,63 @@
+TriggerServerEvent('vrp:server:requestMyPlayerInvData')
+TriggerServerEvent("blrp_inventory:activeItemSlot", number)
+TriggerServerEvent('blrp_inventory:openInventory')
+TriggerServerEvent('blrp_inventory:registerFiredBullet', currentWeapon)
+TriggerServerEvent('blrp_inventory:saveUsedBullets', currentWeapon)
+TriggerServerEvent('blrp_inventory:saveUsedBullets', currentWeapon)
+TriggerServerEvent('blrp_inventory:chestClosed', {
+            chest_name = data.chest_name
+        })
+TriggerServerEvent('blrp_inventory:requestItemOptions', {
+        item_code = data.item_code,
+    })
+TriggerServerEvent('blrp_inventory:performItemAction', {
+      item_code = data.item_code,
+      action_name = data.action_name,
+      item_amount = data.item_amount,
+      meta = data.meta,
+      createLootBox = allowTrash,
+    })
+TriggerServerEvent('blrp_inventory:serverMoveToStorage', {
+            item_code = data.item_code,
+            item_amount = data.item_amount,
+            chest_name = data.chest_name,
+            meta = data.meta,
+        })
+TriggerServerEvent('blrp_inventory:serverMoveToInventory', {
+          item_code = data.item_code,
+          item_amount = data.item_amount,
+          chest_name = data.chest_name,
+          meta = data.meta,
+      })
+TriggerServerEvent('blrp_inventory:setItemSlots', data)
+TriggerEvent('blrp_inventory:hide')
+TriggerEvent('core:client:enableInterface', 'inventory', shouldDisplay)
+TriggerEvent('badMenu:client:hideAll')
+TriggerEvent('vrp:client:killRobbingThread')
+TriggerEvent('vrp:client:isAbleUseInventory', function(result)
+TriggerEvent('core:client:isInterfaceOpened', function(is_ui_opened)
+TriggerEvent("gcphone:getPhoneState", function(phoneIsBeingUsed)
+TriggerEvent('gundraw:clientclient:holsterWeapon')
+TriggerEvent('vrp:client:isAbleUseInventory', function(result)
+TriggerEvent("gcphone:getPhoneState", function(retValue)
+TriggerEvent("blrp_tablet:getTabletState", function(retValue)
+TriggerEvent('blrp_inventory:client:ForceDisarm')
+TriggerEvent('core:client:isInterfaceOpened', function(is_ui_opened)
+TriggerEvent('menu:forceCloseRadialMenu')
+TriggerEvent('blrp_inventory:client:ForceDisarm')
+TriggerEvent('blrp_inventory:client:ForceDisarm')
+TriggerEvent('core:client:toggleNpcAgroState', true)
+TriggerEvent('core:client:resetPedMeleeState')
+TriggerEvent('core:client:renewNpcAgroState')
+TriggerEvent('core:client:toggleNpcAgroState', false)
+TriggerEvent('blrp_inventory:client:ForceDisarm')
+TriggerEvent('gundraw:client:holsterAnimate', currentWeapon, function()
+TriggerEvent('essence:buyCan')
+TriggerEvent('gundraw:client:drawAnimate', weaponName)
+TriggerEvent('vrp:client:notify', 'You have no ammo')
+TriggerEvent('blrp_inventory:hide')
+TriggerEvent('blrp_inventory:hide')
+TriggerEvent('vrp:client:robbingThreadStatus', function(retValue)
+TriggerEvent('vrp:client:notify', "You can't move this item")
+TriggerEvent('vrp:client:robbingThreadStatus', function(retValue)
+TriggerEvent('vrp:client:notify', "You can't move this item")

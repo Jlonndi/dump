@@ -1,0 +1,107 @@
+--local peds = { }
+--local lost_peds = 0
+--
+--Citizen.CreateThread(function()
+--    while true do
+--        Citizen.Wait(10)
+--        local has_found_changes = false
+--        for ped in EnumeratePeds() do
+--            if DoesEntityExist(ped) then
+--                if peds[ped] then
+--                    peds[ped].count = ped + 1
+--                    peds[ped].last_seen = GetGameTimer()
+--                else
+--                    peds[ped] = { count = 1, last_seen = GetGameTimer() }
+--                    printTime(ped, peds[ped], 'found')
+--                end
+--
+--                peds[ped].validated = true
+--            end
+--        end
+--
+--        for ped, stats in pairs(peds) do
+--            if not stats.validated then
+--                printTime(ped, peds[ped], 'lost')
+--                peds[ped] =  nil
+--                lost_peds = lost_peds + 1
+--                has_found_changes = true
+--            end
+--
+--            if peds[ped] then
+--                peds[ped].validated = false
+--            end
+--        end
+--
+--    end
+--end)
+--
+--local ped_types = {
+--    [0] = 'Michael',
+--    [1] = 'Franklin',
+--    [2] = 'Trevor',
+--    [29] = 'Army',
+--    [28] = 'Animal',
+--    [27] = 'SWAT',
+--    [21] = 'LSFD',
+--    [20] = 'Paramedic',
+--    [6] = 'Cop',
+--    [4] = 'Male',
+--    [5] = 'Female',
+--    [26] = 'Human',
+--}
+--
+--function printTime(ped, mdata, type)
+--    local ped_type = GetPedType(ped)
+--    local ped_type_s = '???'
+--    local meta_a = ''
+--    local meta_b = ''
+--    local meta_c = ''
+--    if type == 'lost' then
+--        meta_a = createBracketPrint('lost_count:', tostring(lost_peds))
+--        meta_b = createBracketPrint('found_ago', (GetGameTimer() - mdata.last_seen) / 1000)
+--    end
+--    if type == 'found' then
+--        meta_a = createBracketPrint('active_peds', tablelength(peds))
+--    end
+--
+--    local game_timer_s = createBracketPrint('time', round(GetGameTimer() / 1000) .. 's')
+--    if ped_types[ped_type] then ped_type_s = createBracketPrint('type', ped_types[ped_type]) end
+--    print(game_timer_s .. ped_type_s .. meta_a .. meta_b .. 'Ped ' .. ped .. ' was ' .. type)
+--end
+--
+--function createBracketPrint(type, term)
+--    return '[ ' .. type .. ':' .. term .. ' ] '
+--end
+--
+--function round(num, dec)
+--    local mult = 10^(dec or 0)
+--    return math.floor(num * mult + 0.5) / mult
+--end
+--
+--function tablelength(T)
+--    local count = 0
+--    for _ in pairs(T) do
+--        if _ ~= nil then
+--            count = count + 1
+--        end
+--    end
+--    return count
+--end
+--
+--
+--
+-----
+----- Helpers
+-----
+--
+--function EnumerateEntities(poolname)
+--  return coroutine.wrap(function()
+--		for _, pool_handle in ipairs(GetGamePool(poolname)) do
+--			coroutine.yield(pool_handle)
+--		end
+--  end)
+--end
+--
+--function EnumeratePeds()
+--    return EnumerateEntities('CPed')
+--end

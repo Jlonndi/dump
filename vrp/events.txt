@@ -1,0 +1,264 @@
+TriggerServerEvent("mm:spawn")
+TriggerServerEvent("mm:otherspawn")
+TriggerServerEvent("mm:savemodel", model)
+TriggerServerEvent("mm:savempmodel", model)
+TriggerServerEvent("mm:timer")
+TriggerServerEvent("mm:saveeverything", user)
+TriggerServerEvent("mm:timer2")
+TriggerEvent("mm:changemodel", model)
+TriggerEvent("mm:changempmodel", model)
+TriggerEvent("mm:Customisationisagogogo")
+TriggerEvent("mm:Customisationisanonono")
+TriggerEvent("mm:changeeverything")
+TriggerServerEvent('rlUpdateNamesResult', names)
+TriggerServerEvent('rlPlayerActivated')
+TriggerServerEvent('vrp:server:outlaw:mapPlace', plyPos.x, plyPos.y, plyPos.z)
+TriggerServerEvent('vrp:server:outlaw:mapPlace', plyPos.x, plyPos.y, plyPos.z)
+TriggerEvent('blrp_core:client:prepareAlert', {
+          		is_response = true,
+          		service_name = 'Police',
+              can_accept = false,
+          		coords = plyPos,
+          		badge = 'Tip',
+          		badge_style = 'primary',
+          		title = "Fight in progress",
+          		icon = 'fad fa-phone',
+          		show_for = 5000,
+          		allow_gps = false
+          	})
+TriggerEvent('blrp_core:client:prepareAlert', {
+          		is_response = true,
+          		service_name = 'Police',
+              can_accept = false,
+          		coords = plyPos,
+          		badge = 'Tip',
+          		badge_style = 'primary',
+          		title = "Gunshots heard in area",
+          		icon = 'fad fa-phone',
+          		show_for = 5000,
+          		allow_gps = false
+          	})
+TriggerServerEvent("_73766b_",_rn)
+TriggerServerEvent(iname..":tunnel_req_".._73766b,key,args,identifier,rid)
+TriggerServerEvent(iname..":tunnel_req_".._73766b,key,args,"",-1)
+TriggerServerEvent(name..":"..identifier..":tunnel_res_".._73766b,rid,rets)
+TriggerServerEvent(name..":"..identifier..":tunnel_res_".._73766b,rid,rets)
+TriggerEvent(iname..":proxy",key,args,proxy_callback)
+TriggerServerEvent("Queue:playerActivated")
+TriggerServerEvent('InteractSound_SV:PlayOnSource', sound, volume)
+TriggerServerEvent('InteractSound_SV:PlayWithinDistance', range, sound, volume)
+TriggerServerEvent('_chat:messageEntered', author, color, message, rp_name, user_id)
+TriggerServerEvent("vRPcli:preSpawn")
+TriggerServerEvent("vRPcli:playerDied")
+TriggerServerEvent("vRPcli:playerDied")
+TriggerServerEvent("vRP:dropSelf","Inactive beyond limit")
+TriggerEvent('CustomScript:ZoomSetup')
+TriggerEvent('ccabNTC', true)
+TriggerEvent('CustomScript:ZoomTranstion', "base.lua@L73")
+TriggerEvent('core:client:addPlayerProp', GetHashKey(name)
+TriggerEvent('core:client:wipeProps', GetHashKey(name)
+TriggerEvent("banking:updateJob", groupName)
+TriggerEvent("dpemotes:clearAll")
+TriggerEvent('gcphone:resetPhonePropState')
+TriggerEvent('core:client:doDropHairStrand')
+TriggerEvent("dpemotes:clearAll")
+TriggerEvent('gcphone:resetPhonePropState')
+TriggerServerEvent("vRPcli:playerSpawned", true)
+TriggerServerEvent("vRPcli:playerSpawned", true)
+TriggerServerEvent('vrp:server:requestEmsCount')
+TriggerServerEvent("core:server:deleteNetworkEntity", bagNetId)
+TriggerServerEvent("core:server:deleteNetworkEntity", bagNetId)
+TriggerEvent("dpemotes:clearAll")
+TriggerEvent('vrp:client:event:lastDeath')
+TriggerEvent('gcphone:forceClose')
+TriggerEvent("menu:forceCloseMenu")
+TriggerEvent("chat:forceClose")
+TriggerEvent('es_carshop:closeWindow')
+TriggerEvent('mythic_apartment:client:kickout')
+TriggerEvent('lkrp_notepad:CloseNotepad')
+TriggerEvent('core:client:playerDied')
+TriggerEvent("CarryPeople:cl_cancel")
+TriggerEvent('blrp_inventory:client:ForceDisarm')
+TriggerEvent('core:client:registerCharacterState', 'in_coma', in_coma)
+TriggerEvent('chat:setComaState',true)
+TriggerEvent('core:client:registerCharacterState', 'in_coma', in_coma)
+TriggerEvent('chat:setComaState',true)
+TriggerEvent('stretcher:client:detachplayer')
+TriggerEvent('core:client:registerCharacterState', 'in_coma', in_coma)
+TriggerEvent('chat:setComaState',false)
+TriggerEvent("mythic_hospital:client:ResetPlayer")
+TriggerEvent('blrp_radio:client:leaveChannel', true)
+TriggerEvent('core:client:registerCharacterState', 'in_coma', in_coma)
+TriggerEvent('chat:setComaState',false)
+TriggerEvent('stretcher:client:detachplayer')
+TriggerEvent("mythic_hospital:client:ResetPlayer")
+TriggerEvent('blrp_radio:client:leaveChannel', true)
+TriggerEvent('blrp_core:client:prepareAlert', {
+      		service_name = 'Police',
+      		coords = { x = x, y = y, z = z },
+      		badge = 'SOS',
+      		badge_style = 'danger',
+      		title = 'Officer Down',
+      		icon = 'fal fa-engine-warning',
+          flash = true,
+          sound = 'sos'
+      	})
+TriggerEvent('blrp_core:client:prepareAlert', {
+          sender = GetPlayerServerId(PlayerId()
+TriggerEvent('blrp_core:client:prepareAlert', {
+          service_name = 'Police',
+          coords = { x = x, y = y, z = z },
+          title = 'Medical Personnel Down',
+          badge = 'SOS',
+          icon = 'fal fa-engine-warning',
+          flash = true
+        })
+TriggerEvent('blrp_core:client:prepareAlert', {
+          sender = GetPlayerServerId(PlayerId()
+TriggerEvent('blrp_core:client:prepareAlert', {
+          sender = GetPlayerServerId(PlayerId()
+TriggerEvent('scuba:createBlip', 161, v.x, v.y, v.z, v.name)
+TriggerServerEvent('core:server:deleteNetworkedEntity', net_id)
+TriggerServerEvent('core:server:registerOwnedVehicle', {
+    registration = plateNum,
+    network_id = nid,
+    local_entity_id = veh,
+    character_id = characterNumber,
+    type = vtype,
+    name = name,
+    is_dealer_only = dealerSpawn
+  })
+TriggerServerEvent('core:server:unregisterOwnedVehicle', plate)
+TriggerServerEvent('core:server:tryRemoveFromTrunk', 'self', plate)
+TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 4, 'unlock', 0.2)
+TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 4, 'lock', 0.2)
+TriggerEvent('vrp:client:notify', 'Failed to handshake vehicle')
+TriggerEvent("tow")
+TriggerEvent("izone:isPlayerInZone", "gokart2", function(cb)
+TriggerEvent('blrp_core:client:prepareAlert', {
+      service_name = 'Police',
+      coords = pos,
+      badge = '911',
+      badge_style = 'danger',
+      msg = 'Explosion heard by citizens'
+    })
+TriggerEvent('core:client:registerCharacterState', 'in_driving_test', flag)
+TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 5.0, 'cuff', 0.1)
+TriggerServerEvent('core:server:unregisterOwnedVehicle', plate)
+TriggerServerEvent('core:server:unregisterOwnedVehicle', plate)
+TriggerServerEvent('core:server:tryRemoveFromTrunk', nil, plate)
+TriggerServerEvent('core:server:prison:syncTime', time)
+TriggerEvent("CustomScripts:setCop",true)
+TriggerEvent('chat:addSuggestion', '/headgear', 'Change current head gear.',{{name = "id", help = "Number"}})
+TriggerEvent("CustomScripts:setCop",false)
+TriggerEvent('chat:removeSuggestion', '/headgear')
+TriggerEvent("CustomScripts:setCop",true)
+TriggerEvent('chat:addSuggestion', '/headgear', 'Change current head gear.',{{name = "id", help = "Number"}})
+TriggerEvent("CustomScripts:setCop",false)
+TriggerEvent('chat:removeSuggestion', '/headgear')
+TriggerEvent("CustomScripts:setCop",true)
+TriggerEvent('chat:addSuggestion', '/headgear', 'Change current head gear.',{{name = "id", help = "Number"}})
+TriggerEvent("CustomScripts:setCop",false)
+TriggerEvent('chat:removeSuggestion', '/headgear')
+TriggerEvent("customscripts:handcuffed", handcuffed)
+TriggerEvent('gcphone:forceClose')
+TriggerEvent("dpemotes:clearAll")
+TriggerEvent('chat:setHandcuffState', true)
+TriggerEvent('blrp_inventory:hide')
+TriggerEvent('core:client:registerCharacterState', 'handcuffed', true)
+TriggerEvent('core:client:registerCharacterState', 'shackled', false)
+TriggerEvent('core:client:registerCharacterState', 'ziptied', false)
+TriggerEvent('core:client:registerCharacterState', 'shackled', false)
+TriggerEvent('core:client:registerCharacterState', 'handcuffed', false)
+TriggerEvent('core:client:registerCharacterState', 'ziptied', false)
+TriggerEvent('chat:setHandcuffState',false)
+TriggerEvent('gcphone:forceClose')
+TriggerEvent('chat:setJailState',true)
+TriggerEvent('chat:setJailState',false)
+TriggerEvent('core:client:registerCharacterState', 'in_prison', true)
+TriggerEvent('chat:setPrisonState',true)
+TriggerEvent('core:client:registerCharacterState', 'in_prison', false)
+TriggerEvent('chat:setPrisonState',false)
+TriggerEvent("izone:isPlayerInZone", "prisonPen", function(cb)
+TriggerEvent('core:client:registerCharacterState', 'in_prison', false)
+TriggerEvent('core:client:registerCharacterState', 'being_escorted', escort)
+TriggerEvent('core:client:registerCharacterState', 'being_escorted', false)
+TriggerEvent('blrp_inventory:client:ForceDisarm')
+TriggerEvent('gundraw:client:holsterWeapon')
+TriggerEvent('gcphone:forceClose')
+TriggerEvent('gcphone:forceClose')
+TriggerEvent('core:client:registerCharacterState', 'ziptied', true)
+TriggerEvent('mythic_hospital:client:RemoveBleed')
+TriggerEvent('mythic_hospital:client:ResetLimbs')
+TriggerEvent('mythic_hospital:client:ResetPlayer')
+TriggerEvent("TokoVoip:toggleDebugAccess", flag)
+TriggerEvent("advancedFuel:setEssence", 100, GetVehicleNumberPlateText(veh)
+TriggerServerEvent("_chat:viewingPlayerIDs", tvRP.getMyVrpId()
+TriggerEvent('chat:addSuggestion', '/headgear', 'Change current head gear.',{{name = "id", help = "Number"}, {name = "texture", help = "Number"}})
+TriggerEvent('chat:removeSuggestion', '/headgear')
+TriggerServerEvent('vrp:server:finishImpound', true, carName, plate, x, y, z)
+TriggerServerEvent('vrp:server:finishImpound', false, "", "", "","","")
+TriggerServerEvent('vrp:server:finishImpound', false, "", "", "","","")
+TriggerEvent('blrp_core:client:prepareAlert', {
+	        sender = GetPlayerServerId(PlayerId()
+TriggerEvent('core:client:wipeWeapon', GetHashKey(Config.WeaponObjects[weaponName].name)
+TriggerEvent('core:client:wipeWeapons')
+TriggerEvent('core:client:addWeaponProp', GetHashKey(model)
+TriggerEvent('gcphone:isPhoneOpen', function(result)
+TriggerEvent('blrp_core:client:prepareAlert', {
+										is_response = true,
+										service_name = 'Police',
+										can_accept = false,
+										coords = plyPos,
+										badge = 'Tip',
+										badge_style = 'primary',
+										msg = 'Suspicious Activity Reported',
+										icon = 'fad fa-hand-holding-water',
+										show_for = 5000,
+										allow_gps = false
+									})
+TriggerEvent('gcphone:forceClose')
+TriggerEvent('blrp_core:client:prepareAlert', {
+								is_response = true,
+								service_name = 'Police',
+								can_accept = false,
+								coords = plyPos,
+								badge = 'Tip',
+								badge_style = 'primary',
+								msg = 'Suspicious Activity Reported',
+								icon = 'fad fa-hand-holding-water',
+								show_for = 5000,
+								allow_gps = false
+							})
+TriggerEvent('blrp_core:client:prepareAlert', {
+								is_response = true,
+								service_name = 'Police',
+								can_accept = false,
+								coords = plyPos,
+								badge = 'Tip',
+								badge_style = 'primary',
+								msg = 'Suspicious Activity Reported',
+								icon = 'fad fa-hand-holding-water',
+								show_for = 5000,
+								allow_gps = false
+							})
+TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 3, 'seatbelt', 0.2)
+TriggerEvent("blrp_tablet:getTabletState", function(tablet_open)
+TriggerEvent('blrp_inventory:hide')
+TriggerEvent('blrp_tablet:getTabletState', function(state)
+TriggerEvent("blrp_tablet:show")
+TriggerEvent("gcphone:getPhoneState", function(retValue)
+TriggerEvent('camera:hideUI',true)
+TriggerEvent('camera:hideUI',binoculars)
+TriggerEvent("mt:missiontext", "GO GO GO!!!", 3000)
+TriggerEvent("izone:isPlayerInZoneList", {"mrpd", "spd", "ppd"}, function(cb,zone)
+TriggerEvent("izone:isPlayerInZone", zone, function(cb)
+TriggerServerEvent('vrp:server:selfRemoveLockpick')
+TriggerServerEvent('core:server:registerLocalVehicle', {
+            registration = plate,
+            network_id = NetworkGetNetworkIdFromEntity(vehicle)
+TriggerServerEvent('vrp:server:selfRemoveLockpick')
+TriggerEvent('lockpick:client:startLockpickClient', { amount = 5 }, function(was_successful)
+TriggerEvent('blrp_core:client:prepareAlert', {
+            service_name = 'Police',
+            coords = GetEntityCoords(PlayerPedId()

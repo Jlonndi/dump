@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Banking</title>
+
+    <link href="../css/bootstrap-night.min.css" rel="stylesheet">
+    <link href="../css/banking.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="jumbotron d-flex align-items-center min-vh-100">
+      <div class="container bank-main pt-3">
+        <nav class="navbar navbar-dark bg-dark mb-3 p-3 d-flex justify-content-between">
+            <div><img src="logo.png" alt="logo" class="logo" /></div>
+            <div class="fs-3 px-2">
+              <button type="button" class="btn btn-secondary" id="btn-exit">X</button>
+            </div>
+        </nav>
+
+        <div class="row bank-row">
+          <div class="col-3 scrollable">
+            <div class="sticky-top">
+              <div class="card mb-2">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <span class="text-muted">Available Cash</span>
+                    </div>
+
+                    <div class="col text-end">
+                      <span class="badge bg-secondary" id="available-cash"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="accounts"></div>
+          </div>
+
+          <div class="col-9 scrollable">
+            <h4 id="transaction-history-header">Transaction History</h4>
+            <hr />
+
+            <div id="transactions"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modal-transaction" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-transaction-title"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="transaction-form">
+              <input type="hidden" class="form-control" id="transaction-type">
+
+              <div class="row mb-3">
+                <label for="transaction-source" class="col-sm-2 col-form-label">Source</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="transaction-source" readonly>
+                  <input type="hidden" class="form-control" id="transaction-source-hidden">
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="transaction-amount" class="col-sm-2 col-form-label">Amount</label>
+                <div class="col-sm-10">
+                  <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" class="form-control" id="transaction-amount">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="transaction-note" class="col-sm-2 col-form-label">Note</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="transaction-note" placeholder="Optional note explaining transaction">
+                </div>
+              </div>
+
+              <div id="transaction-target">
+                <div class="row mb-3">
+                  <label for="transaction-target-select" class="col-sm-2 col-form-label">Target</label>
+                  <div class="col-sm-10">
+                    <div class="input-group mb-3">
+                      <span class="input-group-text" style="width: 85px">Internal</span>
+                      <select class="form-select" id="transaction-target-select"></select>
+                    </div>
+
+                    <div class="input-group">
+                      <span class="input-group-text" style="width: 85px">External</span>
+                      <input type="text" class="form-control" id="transaction-target-text" placeholder="Account Number" maxlength="15">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <div class="w-100 text-center">
+              <small class="form-text text-danger" id="transaction-error"></small>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="transaction-submit"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/banking.js"></script>
+
+    <script type="text/template" data-template="account-item">
+      <div class="card mb-2" data-account="${number}">
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-7">
+              <h6 class="card-subtitle text-muted">${type} Account</h6>
+              <p class="text-muted small mb-0">${alias}</p>
+              <small class="card-subtitle text-muted">Account # ${number}</small>
+            </div>
+
+            <div class="col-5 d-flex align-items-center">
+              <div class="card-text w-100 text-end">
+                <span class="badge bg-${balance-style}">${balance_formatted}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <div style="width: 66px">
+              <button type="button" class="btn btn-bank btn-sm btn-action-deposit" data-account="${number}" data-transaction="deposit">Deposit</button>
+            </div>
+            <div style="width: 78px">
+              <button type="button" class="btn btn-bank btn-sm btn-action-withdraw" data-account="${number}" data-transaction="withdraw">Withdraw</button>
+            </div>
+            <div style="width: 67px">
+              <button type="button" class="btn btn-bank btn-sm" data-account="${number}" data-transaction="transfer">Transfer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" data-template="account-transaction">
+      <div class="card mb-2">
+        <div class="card-body pb-1">
+          <div class="row">
+            <div class="col-7">
+              <h5 class="card-title text-uppercase">${type}</h5>
+              <h6 class="card-subtitle text-muted mb-1">${transactor}</h6>
+              <p class="card-subtitle text-muted small mb-1">${uid}</p>
+              <p class="card-subtitle text-muted small mb-1">${date}</p>
+            </div>
+
+            <div class="col-5 d-flex align-items-center">
+              <h3 class="card-text w-100 text-end"><span class="badge bg-secondary" style="background-color: rgba(var(--bs-secondary-rgb), 0.5) !important">${amount}</span></h3>
+            </div>
+          </div>
+
+          <h6 class="text-muted">${notes}</h6>
+        </div>
+      </div>
+    </script>
+  </body>
+</html>

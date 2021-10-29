@@ -1,0 +1,2 @@
+TriggerEvent("holster:sounds", "unholster", 0.2)
+TriggerEvent("holster:sounds", "holster", 0.2)

@@ -1,0 +1,5 @@
+TriggerServerEvent('DeathScript:AdminReturn', '~g~Player have been revived', admin)
+TriggerServerEvent('DeathScript:AdminReturn', '~r~Player is alive', admin)
+TriggerServerEvent('DeathScript:AdminReturn', '~g~Player have been respawned', admin)
+TriggerServerEvent('DeathScript:AdminReturn', '~r~Player is alive', admin)
+TriggerEvent('playerSpawned', coords.x, coords.y, coords.z, coords.heading)

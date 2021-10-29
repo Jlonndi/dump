@@ -1,0 +1,5 @@
+TriggerEvent('blrp_doors:client:searchDoorLock')
+TriggerEvent('blrp_doors:client:searchGateLock')
+TriggerEvent('helicam:client:toggleStreetOverlay')
+TriggerEvent('core:client:vehicle-storage:openGlovebox')
+TriggerEvent('core:client:vehicle-storage:openGunrack')

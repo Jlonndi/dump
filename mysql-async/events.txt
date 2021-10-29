@@ -1,0 +1,7 @@
+emit("hook:"+e)
+emit("flush")
+emit("init",kr)
+TriggerServerEvent('mysql-async:request-data')
+TriggerServerEvent('mysql-async:request-data')
+TriggerServerEvent('mysql-async:request-server-status')
+TriggerServerEvent('mysql-async:request-table-schema', tableName)

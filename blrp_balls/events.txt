@@ -1,0 +1,1 @@
+TriggerServerEvent("blrp_balls:server:giveball", item)
